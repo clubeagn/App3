@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Modal, StyleSheet, View, TextInput, ImageBackground, TouchableOpacity, Image, Text, StatusBar } from 'react-native';
 import ToolBar from './ToolBar';
    
@@ -22,19 +21,9 @@ export default class Home extends Component{
 
   setModalVisible(visible) {
 
-    axios.post('/user', {
-      firstName: 'Fred',
-      lastName: 'Flintstone'
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
     this.setState({modalVisible: visible});
     this.navigate('etapa1');
+
   }
 
   render() {
