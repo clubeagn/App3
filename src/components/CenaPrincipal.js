@@ -14,7 +14,7 @@ export default class Home extends Component{
       name
     })
   }
-
+s
   state = {
     modalVisible: false,
   };

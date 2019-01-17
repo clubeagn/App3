@@ -40,8 +40,12 @@ export default class CenaEtapa1 extends Component{
 
           <View style={ styles.boxInputs } >
             <TextInput returnKeyType="next" placeholder="Qual o seu nome completo?" style={ styles.inputs } textContentType={ 'name' } maxLength={55} placeholderTextColor={'#3c3c3c'} keyboardType={'default'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
-            <TextInput returnKeyType="next" placeholder="Caso seja o ganhador, podemos te ligar em qual telefone?" style={styles.inputs} textContentType={'telephoneNumber'} maxLength={11} placeholderTextColor={'#3c3c3c'} keyboardType={'number-pad'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
-            <TextInput returnKeyType="next" placeholder="Seu e-mail" style={styles.inputs} textContentType={'emailAddress'} maxLength={40} placeholderTextColor={'#3c3c3c'} keyboardType={'email-address'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
+            <TextInput returnKeyType="next" placeholder="Caso você seja o sortudo(a) em qual telefone podemos te ligar?" style={styles.inputs} textContentType={'telephoneNumber'} maxLength={11} placeholderTextColor={'#3c3c3c'} keyboardType={'number-pad'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
+          </View>
+
+          <View style={styles.boxDouble}>
+            <TextInput returnKeyType="next" placeholder="Quanto você gastou neste estabelecimento?" style={styles.inputP} textContentType={'telephoneNumber'} maxLength={11} placeholderTextColor={'#3c3c3c'} keyboardType={'number-pad'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
+            <TextInput returnKeyType="next" placeholder="Em que período podemos te ligar para validar o CUPOM?" style={styles.inputP} maxLength={11} placeholderTextColor={'#3c3c3c'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
           </View>
               
           <View style={styles.boxBtn} >
@@ -80,10 +84,31 @@ const styles = StyleSheet.create({
 
     boxInputs: {
       marginLeft: 25,
-      marginTop: 35,
-      marginBottom: 25,
+      marginTop: 15,
+      marginBottom: 15,
     },
-  
+
+    boxDouble: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      flex: 1,
+      marginLeft: 25,
+      marginBottom: 15,
+    },
+
+    inputP: {
+      width: 600,
+      height: 70,
+      borderRadius: 30,
+      fontSize: 20,
+      padding: 15,
+      paddingLeft: 55,
+      marginRight: 30,
+      borderWidth: 1,
+      color: '#3686d1',
+      borderColor: '#3686d1',
+    },
+
     title: {
       fontSize: 55,
       fontWeight: 'bold',
@@ -98,6 +123,7 @@ const styles = StyleSheet.create({
     btnStep1: {
       borderRadius: 60,
       width: 350,
-      height: 70
+      height: 70,
+      marginRight: 10,
     }
 })
