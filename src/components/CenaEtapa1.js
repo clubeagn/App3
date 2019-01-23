@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { 
+import {
   StyleSheet, 
   View, 
   ScrollView, 
@@ -7,16 +7,25 @@ import {
   KeyboardAvoidingView, 
   Text,
   TextInput,
+  ActivityIndicator,
   StatusBar,
   Image,
   } from 'react-native';
+import axios from 'axios';
 import ToolBar from './ToolBar';
 
 export default class CenaEtapa1 extends Component{
 
-  constructor(){
+  constructor() {
     super()
     this.navigate = this.navigate.bind(this);
+
+    this.state = {
+      showIndicator: false, // loading 
+      name: '', // nome participante
+      telephone: '', // telefone participante
+      email: '', // email participante
+    };
   }
 
   navigate(name){
@@ -24,41 +33,94 @@ export default class CenaEtapa1 extends Component{
       name
     })
   }
-  
-  render() {
     
-    return (
-      <KeyboardAvoidingView style={ {backgroundColor:'#fff', flex:1} } resetScrollToCoords={ { x: 0, y: 0 } } scrollEnabled={ false } keyboardVerticalOffset={-500} behavior="padding" enabled>
-        <ScrollView>
+  funcaoPost = () => {
 
-          <StatusBar backgroundColor={'#3686d1'} barStyle="light-content" hidden />
-          <ToolBar />
+    let data = { name: this.state.name, telephone: this.state.telephone, email: this.state.email };
 
-          <View style={ styles.boxQuestion }>
-            <Text style={ styles.title }> DADOS DE CONTATO</Text>
-          </View>
+    if ( (data.name.length == 0) || (data.name.length < 5) ){
+      
+      alert('Qual o seu nome completo?');
 
-          <View style={ styles.boxInputs } >
-            <TextInput returnKeyType="next" placeholder="Qual o seu nome completo?" style={ styles.inputs } textContentType={ 'name' } maxLength={55} placeholderTextColor={'#3c3c3c'} keyboardType={'default'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
-            <TextInput returnKeyType="next" placeholder="Caso você seja o sortudo(a) em qual telefone podemos te ligar?" style={styles.inputs} textContentType={'telephoneNumber'} maxLength={11} placeholderTextColor={'#3c3c3c'} keyboardType={'number-pad'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
-          </View>
+    }else{
 
-          <View style={styles.boxDouble}>
-            <TextInput returnKeyType="next" placeholder="Quanto você gastou neste estabelecimento?" style={styles.inputP} textContentType={'telephoneNumber'} maxLength={11} placeholderTextColor={'#3c3c3c'} keyboardType={'number-pad'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
-            <TextInput returnKeyType="next" placeholder="Em que período podemos te ligar para validar o CUPOM?" style={styles.inputP} maxLength={11} placeholderTextColor={'#3c3c3c'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
-          </View>
-              
-          <View style={styles.boxBtn} >
-            <TouchableOpacity onPress={ () => this.navigate('etapa2') } >
-              <Image style={styles.btnStep1} source={ require('../../src/imgs/btnAvancar.png') } />
-            </TouchableOpacity>
-          </View>
+      if( (data.telephone.length == 0) || (data.telephone.length < 9)){
 
-        </ScrollView>
-      </KeyboardAvoidingView>
-    )
+        alert('Caso você seja o sortudo(a) em qual telefone podemos te ligar?');
+
+      }else{
+
+        if( (data.email.length == 0) || (data.email.length < 5)){
+
+          alert('Deixe seu e-mail, caso você seja o sortudo(a)');
+  
+        }else{
+
+          this.setState({ showIndicator: true });
+          axios.post('https://api.clubepremiado.com.br/v1/post-question', { token_api: 'e807f1fcf82d132f9bb018ca6738a19f', data: data })
+          .then(res => {
+            //console.log(res);
+            console.log(res.data);
+            this.setState({ showIndicator: false });
+            this.navigate('etapa2');
+    
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+  
+        }
+
+      }
+
+    }
+
   }
 
+  handleInputChange = (telephone) => {
+    if (/^\d+$/.test(telephone)) {
+      this.setState({
+        telephone: telephone
+      });
+    }
+  }
+
+  render() {
+
+    if(this.state.showIndicator){
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    }else{
+      return (
+        <KeyboardAvoidingView style={ {backgroundColor:'#fff', flex:1} } resetScrollToCoords={ { x: 0, y: 0 } } scrollEnabled={ false } keyboardVerticalOffset={-500} behavior="padding" enabled>
+          <ScrollView>
+            <StatusBar backgroundColor={'#3686d1'} barStyle="light-content" hidden />
+            <ToolBar />
+
+            <View style={ styles.boxsQuestion }>
+              <Text style={ styles.title }> DADOS DE CONTATO</Text>
+            </View>
+
+            <View style={ styles.boxInputs } >
+              <TextInput returnKeyType="next" onChangeText={ name => this.setState({ name: name }) } value={this.state.name} placeholder="Qual o seu nome completo?" style={ styles.inputs } textContentType={ 'name' } maxLength={55} placeholderTextColor={'#3c3c3c'} keyboardType={'default'} autoCorrect={false} autoCapitalize={'sentences'} contextMenuHidden={true} />
+              <TextInput returnKeyType="next" onChangeText={ telephone => this.setState({ telephone: telephone }) } onChangeText={this.handleInputChange} value={this.state.telephone} placeholder="Caso você seja o sortudo(a) em qual telefone podemos te ligar?" style={styles.inputs} textContentType={'telephoneNumber'} maxLength={13} placeholderTextColor={'#3c3c3c'} keyboardType={'phone-pad'} autoCorrect={false} contextMenuHidden={true} />
+              <TextInput returnKeyType="next" onChangeText={ email => this.setState({ email: email }) } value={this.state.email} placeholder="Deixe seu e-mail, caso você seja o sortudo(a)" style={styles.inputs} textContentType={'emailAddress'} maxLength={99} placeholderTextColor={'#3c3c3c'} keyboardType={'email-address'} autoCorrect={false} autoCapitalize={'sentences'} contextMenuHidden={true} />
+            </View>
+
+            <View style={styles.boxBtn} >
+              <TouchableOpacity onPress={ () => this.funcaoPost() } >
+                <Image style={styles.btnStep1} source={ require('../../src/imgs/btnAvancar.png') } />
+              </TouchableOpacity>
+            </View>
+
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )
+    }
+  }
 }
 
 const styles = StyleSheet.create({
@@ -125,5 +187,17 @@ const styles = StyleSheet.create({
       width: 350,
       height: 70,
       marginRight: 10,
-    }
+    },
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 70
+    },
+    activityIndicator: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 80
+   }
 })

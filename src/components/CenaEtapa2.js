@@ -17,9 +17,9 @@ export default class CenaEtapa2 extends Component{
     this.navigate = this.navigate.bind(this);
   }
 
-  navigate(name){
+  navigate(url){
     this.props.navigator.push({
-      name
+      url
     })
   }
 
