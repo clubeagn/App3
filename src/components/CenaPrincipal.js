@@ -12,6 +12,7 @@ import {
   StatusBar 
 } from 'react-native';
 import axios from 'axios';
+import { TextInputMask } from 'react-native-masked-text'
 import ToolBar from './ToolBar';
    
 export default class Home extends Component{
@@ -26,7 +27,7 @@ export default class Home extends Component{
       plate: '', // placa participante
     };
   }
-
+  
   navigate(name){
     this.props.navigator.push({ name })
   }
@@ -36,7 +37,7 @@ export default class Home extends Component{
    // this.navigate('etapa1')
   }
 
-  avancaStep1(visible) {
+  avancaStep1() {
     let data = {plate: this.state.plate };
 
     if ( (data.plate.length == 0) || (data.plate.length < 5) ){
@@ -44,21 +45,11 @@ export default class Home extends Component{
       alert('Qual a placa do seu veículo?');
 
     }else{
-      
-      this.setState({ showIndicator: true });
-      axios.post('https://api.clubepremiado.com.br/v1/post-question', { token_api: 'e807f1fcf82d132f9bb018ca6738a19f', data: data })
-      .then(res => {
-        //console.log(res);
-        console.log(res.data);
+        plate = data.plate;
+        
         this.setState({modalVisible: false});
         this.setState({ showIndicator: false });
         this.navigate('etapa1');
-
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-      
     }
 
   }

@@ -36,7 +36,7 @@ export default class CenaEtapa1 extends Component{
     
   funcaoPost = () => {
 
-    let data = { name: this.state.name, telephone: this.state.telephone, email: this.state.email };
+    let data = { name: this.state.name, plate: plate, telephone: this.state.telephone, email: this.state.email };
 
     if ( (data.name.length == 0) || (data.name.length < 5) ){
       
@@ -57,7 +57,7 @@ export default class CenaEtapa1 extends Component{
         }else{
 
           this.setState({ showIndicator: true });
-          axios.post('https://api.clubepremiado.com.br/v1/post-question', { token_api: 'e807f1fcf82d132f9bb018ca6738a19f', data: data })
+          axios.post('https://api.clubepremiado.com.br/v1/post-participants', { token_api: 'e807f1fcf82d132f9bb018ca6738a19f', data: data })
           .then(res => {
             //console.log(res);
             console.log(res.data);
