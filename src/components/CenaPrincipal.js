@@ -3,7 +3,6 @@ import {
   Modal,
   StyleSheet,
   View,
-  TextInput,
   ImageBackground,
   TouchableOpacity,
   Image,
@@ -11,7 +10,6 @@ import {
   ActivityIndicator,
   StatusBar 
 } from 'react-native';
-import axios from 'axios';
 import { TextInputMask } from 'react-native-masked-text'
 import ToolBar from './ToolBar';
    
@@ -38,7 +36,7 @@ export default class Home extends Component{
   }
 
   avancaStep1() {
-    let data = {plate: this.state.plate };
+    let data = { plate: this.state.plate };
 
     if ( (data.plate.length == 0) || (data.plate.length < 5) ){
       
@@ -47,7 +45,7 @@ export default class Home extends Component{
     }else{
         plate = data.plate;
         
-        this.setState({modalVisible: false});
+        this.setState({ modalVisible: false });
         this.setState({ showIndicator: false });
         this.navigate('etapa1');
     }
@@ -87,12 +85,12 @@ export default class Home extends Component{
           </ImageBackground>
 
           <Modal 
-            animationType="slide" 
+            animationType="fade" 
             transparent={false} 
             hardwareAccelerated={true}
             visible={this.state.modalVisible} 
             onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
+              console.log('Modal has been closed.');
             }}>
             <View style={ {marginTop: 22} }>
               <View style={ styles.boxTitle}>
@@ -100,7 +98,22 @@ export default class Home extends Component{
               </View>
                 
                 <View style={styles.boxInputs} >
-                  <TextInput returnKeyType="next" placeholder="Qual a placa do seu veículo?" style={styles.inputs} onChangeText={ plate => this.setState({ plate: plate }) } value={this.state.plate} textContentType={'name'} maxLength={8} placeholderTextColor={'#3c3c3c'} keyboardType={'default'} autoCorrect={false} autoCapitalize={'characters'} contextMenuHidden={true} />
+                  <TextInputMask
+                  type={'custom'}
+                  options={{mask:'AAA-9999'}}
+                  returnKeyType="next" 
+                  placeholder="Qual a placa do seu veículo?" 
+                  style={styles.inputs}
+                  onChangeText={ plate => this.setState({ plate: plate }) }
+                  value={this.state.plate} 
+                  textContentType={'name'}
+                  placeholderTextColor={'#3c3c3c'}
+                  maxLength={8} 
+                  keyboardType={'default'} 
+                  autoCorrect={false}
+                  autoCapitalize={'characters'}
+                  contextMenuHidden={true}
+                  />
                 </View>
 
                 <View style={styles.boxBtn} >

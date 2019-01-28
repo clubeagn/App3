@@ -12,6 +12,7 @@ import {
   Image,
   } from 'react-native';
 import axios from 'axios';
+import { TextInputMask } from 'react-native-masked-text'
 import ToolBar from './ToolBar';
 
 export default class CenaEtapa1 extends Component{
@@ -57,15 +58,24 @@ export default class CenaEtapa1 extends Component{
         }else{
 
           this.setState({ showIndicator: true });
-          axios.post('https://api.clubepremiado.com.br/v1/post-participants', { token_api: 'e807f1fcf82d132f9bb018ca6738a19f', data: data })
+
+          console.log(data);
+          axios.post('https://api.clubepremiado.com.br/v1/post-participants', { 
+            token_api: 'e807f1fcf82d132f9bb018ca6738a19f', 
+            name: this.state.name, 
+            plate: plate,
+            telephone: this.state.telephone, 
+            email: this.state.email
+          })
           .then(res => {
-            //console.log(res);
+            console.log(res);
             console.log(res.data);
             this.setState({ showIndicator: false });
             this.navigate('etapa2');
     
           })
           .catch(function (error) {
+            this.setState({ showIndicator: false });
             console.log(error);
           });
   
@@ -100,13 +110,27 @@ export default class CenaEtapa1 extends Component{
             <StatusBar backgroundColor={'#3686d1'} barStyle="light-content" hidden />
             <ToolBar />
 
-            <View style={ styles.boxsQuestion }>
+            <View style={ styles.boxQuestion }>
               <Text style={ styles.title }> DADOS DE CONTATO</Text>
             </View>
 
             <View style={ styles.boxInputs } >
               <TextInput returnKeyType="next" onChangeText={ name => this.setState({ name: name }) } value={this.state.name} placeholder="Qual o seu nome completo?" style={ styles.inputs } textContentType={ 'name' } maxLength={55} placeholderTextColor={'#3c3c3c'} keyboardType={'default'} autoCorrect={false} autoCapitalize={'sentences'} contextMenuHidden={true} />
-              <TextInput returnKeyType="next" onChangeText={ telephone => this.setState({ telephone: telephone }) } onChangeText={this.handleInputChange} value={this.state.telephone} placeholder="Caso você seja o sortudo(a) em qual telefone podemos te ligar?" style={styles.inputs} textContentType={'telephoneNumber'} maxLength={13} placeholderTextColor={'#3c3c3c'} keyboardType={'phone-pad'} autoCorrect={false} contextMenuHidden={true} />
+              <TextInputMask
+                  type={'cel-phone'}
+                  options={{mask:'(99)99999-9999'}}
+                  returnKeyType="next"
+                  onChangeText={ telephone => this.setState({ telephone: telephone }) } 
+                  value={this.state.telephone} 
+                  placeholder="Caso você seja o sortudo(a) em qual telefone podemos te ligar?" 
+                  style={styles.inputs} 
+                  textContentType={'telephoneNumber'} 
+                  maxLength={15} 
+                  placeholderTextColor={'#3c3c3c'}
+                  keyboardType={'phone-pad'} 
+                  autoCorrect={false} 
+                  contextMenuHidden={true}
+                  />
               <TextInput returnKeyType="next" onChangeText={ email => this.setState({ email: email }) } value={this.state.email} placeholder="Deixe seu e-mail, caso você seja o sortudo(a)" style={styles.inputs} textContentType={'emailAddress'} maxLength={99} placeholderTextColor={'#3c3c3c'} keyboardType={'email-address'} autoCorrect={false} autoCapitalize={'sentences'} contextMenuHidden={true} />
             </View>
 

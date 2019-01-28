@@ -39,7 +39,7 @@ export default class CenaEtapa2 extends Component{
             <Text style={styles.subtitle}>
               PRONTO, VOCÊ JÁ ESTÁ PARTICIPANDO, para consultar o resultado da promoção entre em nosso site www.clubepremiado.com.br
               e consulte o resultado com a placa inserida. 
-              OLX-0000
+              {plate}
             </Text>
           </View>
               
