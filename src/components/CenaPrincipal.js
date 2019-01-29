@@ -32,7 +32,6 @@ export default class Home extends Component{
 
   abreModal(){
     this.setState({modalVisible: true});
-   // this.navigate('etapa1')
   }
 
   avancaStep1() {

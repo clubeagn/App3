@@ -8,7 +8,7 @@ import {
   Text,
   StatusBar,
   Image,
-  Picker} from 'react-native';
+  } from 'react-native';
 import ToolBar from './ToolBar';
 
 export default class CenaEtapa2 extends Component{
@@ -32,15 +32,21 @@ export default class CenaEtapa2 extends Component{
           <ToolBar />
 
           <View style={styles.boxQuestion}>
-            <Text style={styles.title}> PARABÉNS! </Text>
+            <Text style={styles.title}> VOCÊ JÁ ESTÁ CONCORRENDO! </Text>
           </View>
 
           <View style={styles.box}>
             <Text style={styles.subtitle}>
-              PRONTO, VOCÊ JÁ ESTÁ PARTICIPANDO, para consultar o resultado da promoção entre em nosso site www.clubepremiado.com.br
-              e consulte o resultado com a placa inserida. 
-              {plate}
-            </Text>
+              PRONTO, agora é só aguardar pelo sorteio, caso seja o sortudo não se preocupe nosso Back Office ligará pra você avisando! E lembre-se: você utilizar sua placa para consultar o resultado da promoção, basta entrar em nosso site www.clubepremiado.com.br
+              </Text>
+          </View>
+
+          <View style={styles.box}>
+             
+              <Text style={styles.plate}>
+                {plate}
+              </Text>
+
           </View>
               
           <View style={styles.boxBtn} >
@@ -84,6 +90,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 70,
     marginRight: 15,
+  },
+
+  plate: {
+    fontSize: 55,
+    fontWeight: 'bold',
+    marginTop: 10,
   },
 
   btnStep1: {

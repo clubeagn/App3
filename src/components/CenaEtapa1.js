@@ -61,18 +61,18 @@ export default class CenaEtapa1 extends Component{
 
           console.log(data);
           axios.post('https://api.clubepremiado.com.br/v1/post-participants', { 
-            token_api: 'e807f1fcf82d132f9bb018ca6738a19f', 
+            token_api: 'e807f1fcf82d132f9bb018ca6738a10f', 
             name: this.state.name, 
             plate: plate,
             telephone: this.state.telephone, 
             email: this.state.email
           })
           .then(res => {
-            console.log(res);
-            console.log(res.data);
-            this.setState({ showIndicator: false });
 
-            if(res.data.gravou = 'nao'){
+            this.setState({ showIndicator: false });
+            console.log(res.data.gravou);
+
+            if(res.data.gravou == 'nao'){
               alert(res.data.mensagem);
               this.navigate('home');
             }else{
@@ -91,14 +91,6 @@ export default class CenaEtapa1 extends Component{
 
     }
 
-  }
-
-  handleInputChange = (telephone) => {
-    if (/^\d+$/.test(telephone)) {
-      this.setState({
-        telephone: telephone
-      });
-    }
   }
 
   render() {
