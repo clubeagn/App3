@@ -38,7 +38,7 @@ export default class Home extends Component{
   avancaStep1() {
     let data = { plate: this.state.plate };
 
-    if ( (data.plate.length == 0) || (data.plate.length < 5) ){
+    if ( (data.plate.length == 0) || (data.plate.length < 8) ){
       
       alert('Qual a placa do seu veículo?');
 

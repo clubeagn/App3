@@ -71,7 +71,13 @@ export default class CenaEtapa1 extends Component{
             console.log(res);
             console.log(res.data);
             this.setState({ showIndicator: false });
-            this.navigate('etapa2');
+
+            if(res.data.gravou = 'nao'){
+              alert(res.data.mensagem);
+              this.navigate('home');
+            }else{
+              this.navigate('etapa2');
+            }
     
           })
           .catch(function (error) {
