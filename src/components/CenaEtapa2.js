@@ -7,10 +7,10 @@ import {
   KeyboardAvoidingView, 
   Text,
   StatusBar,
+  Keyboard,
+  ImageBackground,
   Image,
   } from 'react-native';
-import ToolBar from './ToolBar';
-
 export default class CenaEtapa2 extends Component{
   constructor(){
     super()
@@ -18,26 +18,23 @@ export default class CenaEtapa2 extends Component{
   }
 
   navigate(url){
-    this.props.navigator.push({
-      url
-    })
+    this.props.navigator.push({ url })
   }
 
   render() {
     
     return (
       <KeyboardAvoidingView style={ {backgroundColor:'#fff', flex:1} } resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={false} keyboardVerticalOffset={-500} behavior="padding" enabled>
+        <ImageBackground source={ require('../../src/imgs/bg_fim.png') } style={{width: '100%', height: '100%'}} >
         <ScrollView>
           <StatusBar backgroundColor={'#3686d1'} barStyle="light-content" hidden />
-          <ToolBar />
-
           <View style={styles.boxQuestion}>
             <Text style={styles.title}> VOCÊ JÁ ESTÁ CONCORRENDO! </Text>
           </View>
 
           <View style={styles.box}>
             <Text style={styles.subtitle}>
-              PRONTO, agora é só aguardar pelo sorteio, caso seja o sortudo não se preocupe nosso Back Office ligará pra você avisando! E lembre-se: você utilizar sua placa para consultar o resultado da promoção, basta entrar em nosso site www.clubepremiado.com.br
+              Pronto, agora é só aguardar pelo sorteio, caso seja o sortudo não se preocupe a gente liga pra você avisando! E lembre-se: você deve utilizar sua placa para consultar o resultado da promoção, basta entrar em nosso site www.clubepremiado.com.br
               </Text>
           </View>
 
@@ -56,6 +53,7 @@ export default class CenaEtapa2 extends Component{
           </View>
 
         </ScrollView>
+        </ImageBackground>
       </KeyboardAvoidingView>
     )
   }
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
   boxQuestion: {
     alignItems: 'center',
     marginTop: 25,
-    marginBottom: 25,
+    marginBottom: 50,
   },
   
   box: {
@@ -76,13 +74,29 @@ const styles = StyleSheet.create({
   
   subtitle: {
     width: 900,
-    alignItems: 'center',
+    textAlign:'center',
     fontSize: 22,
     fontWeight: 'normal',
   },
 
+  sub_title: {
+    fontSize: 18,
+  },
+
+  sub_titlebox: {
+    marginTop: 50,
+    marginBottom: 50,
+    width: 600,
+    alignItems:'center',
+  },
+  
+  sub_title2: {
+    fontSize: 28,
+    textAlign:'center',
+  },
+
   title: {
-    fontSize: 55,
+    fontSize: 45,
     fontWeight: 'bold',
   },
   

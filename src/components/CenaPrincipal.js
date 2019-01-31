@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   Image,
   Text,
+  Keyboard,
   ActivityIndicator,
+  Alert,
   StatusBar 
 } from 'react-native';
+
 import { TextInputMask } from 'react-native-masked-text'
 import ToolBar from './ToolBar';
    
@@ -21,7 +24,8 @@ export default class Home extends Component{
     
     this.state = {
       showIndicator: false, // loading
-      modalVisible: false, // modal
+      modalWithVehicle: false, // modal
+      modalNoVehicle: false, // modal de quem nao tem veiculo
       plate: '', // placa participante
     };
   }
@@ -30,8 +34,26 @@ export default class Home extends Component{
     this.props.navigator.push({ name })
   }
 
-  abreModal(){
-    this.setState({modalVisible: true});
+  naoTenhoVeiculo(){
+    this.setState({modalNoVehicle: true});
+  }
+
+  // cancela e fecha o modal de indicacao
+  cancelIndicacao (){
+    this.setState({ modalWithVehicle: false });
+    this.setState({ modalNoVehicle: false });
+  }
+
+  // cancela e fecha o modal de indicacao
+  simTenhoVeiculo(){
+    this.setState({modalWithVehicle: true});
+    this.setState({ modalNoVehicle: false });
+  }
+
+  // cancela e fecha o modal de indicacao
+  cancel() {
+    this.setState({ modalWithVehicle: false });
+    this.setState({ modalNoVehicle: false });
   }
 
   avancaStep1() {
@@ -39,20 +61,22 @@ export default class Home extends Component{
 
     if ( (data.plate.length == 0) || (data.plate.length < 8) ){
       
-      alert('Qual a placa do seu veículo?');
-
+    Alert.alert(
+      'Clube Premiado', 'Qual a placa do seu veículo?',
+      [{text: 'Tentar novamente', onPress: () => console.log('OK Pressed')},],
+      {cancelable: false},
+    );
+    
     }else{
         plate = data.plate;
         
-        this.setState({ modalVisible: false });
-        this.setState({ showIndicator: false });
+        //fecha os modais abertos
+        this.setState({ modalWithVehicle: false });
+        this.setState({ modalNoVehicle: false });
+
         this.navigate('etapa1');
     }
 
-  }
-
-  cancel() {
-    this.setState({modalVisible: false});
   }
 
   render() {
@@ -73,14 +97,17 @@ export default class Home extends Component{
 
             <View style={styles.boxTitle}>
               <Text style={styles.title}> VOCÊ TEM VEÍCULO? </Text>
+              <View style={styles.sub_titlebox}>
+                <Text style={styles.sub_title2}>Para participar é muito fácil, basta responder um simples questionário e pronto! Você já está concorrendo.</Text>
+              </View>
             </View>
 
             <View style={styles.containerBtns}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={ () => this.naoTenhoVeiculo() }>
                 <Image style={styles.btnNao} source={ require('../../src/imgs/btnNao.png') } />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={ () => this.abreModal() } >
+              <TouchableOpacity onPress={ () => this.simTenhoVeiculo() } >
                 <Image style={styles.btnSim} source={ require('../../src/imgs/btnSim.png') } />
               </TouchableOpacity>
             </View>
@@ -88,50 +115,92 @@ export default class Home extends Component{
           </ImageBackground>
 
           <Modal 
-            animationType="fade" 
             transparent={false} 
             hardwareAccelerated={true}
-            visible={this.state.modalVisible} 
+            visible={this.state.modalWithVehicle}
+            animationType={'fade'}
             onRequestClose={() => {
               console.log('Modal has been closed.');
             }}>
-            <View style={ {marginTop: 22} }>
-              <View style={ styles.boxTitle}>
-                <Text style={styles.title}>DADOS DO VEÍCULO</Text>
-                <Text style={styles.sub_title}>Utilize a placa do seu veículo para consultar o resultado</Text>
+            <View>
+              <ImageBackground source={ require('../../src/imgs/bg_step1.png') } style={{width: '100%', height: '100%'}} >
+                <View style={ styles.modalWithVehicle }>
+                  <View style={ styles.boxTitle}>
+                    <Text style={styles.title}>DADOS DO VEÍCULO</Text>
+                    <Text style={styles.sub_title}>Utilize a placa do veículo para consultar o resultado</Text>
+                  </View>
+                    
+                    <View style={styles.boxInputs} >
+
+                      <TextInputMask
+                      type={'custom'}
+                      options={{mask:'AAA-9999'}}
+                      returnKeyType="next" 
+                      placeholder="Qual a placa do veículo?" 
+                      onChangeText={ plate => this.setState({ plate: plate }) }
+                      value={this.state.plate} 
+                      placeholderTextColor={'#3c3c3c'}
+                      maxLength={8} 
+                      autoCorrect={false}
+                      autoCapitalize = 'characters'
+                      contextMenuHidden={true}
+                      style = {styles.inputs}
+                      blurOnSubmit={ false }
+                      onSubmitEditing={() => {
+                        Keyboard.dismiss
+                        this.avancaStep1();
+                      }}
+                      />
+                    </View>
+
+                    <View style={styles.containerBtns} >
+
+                      <TouchableOpacity onPress={() => { this.cancel(); }}>
+                        <Image style={styles.btn} source={ require('../../src/imgs/btnCancelar.png') } />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity onPress={() => { this.avancaStep1(false); }} >
+                        <Image style={styles.btn} source={ require('../../src/imgs/btnAvancar.png') } />
+                      </TouchableOpacity>
+
+                    </View>
+                  </View>
+                </ImageBackground>
               </View>
-                
-                <View style={styles.boxInputs} >
-                  <TextInputMask
-                  type={'custom'}
-                  options={{mask:'AAA-9999'}}
-                  returnKeyType="next" 
-                  placeholder="Qual a placa do seu veículo?" 
-                  style={styles.inputs}
-                  onChangeText={ plate => this.setState({ plate: plate }) }
-                  value={this.state.plate} 
-                  textContentType={'name'}
-                  placeholderTextColor={'#3c3c3c'}
-                  maxLength={8} 
-                  keyboardType={'default'} 
-                  autoCorrect={false}
-                  autoCapitalize={'characters'}
-                  contextMenuHidden={true}
-                  />
-                </View>
-
-                <View style={styles.containerBtns} >
-
-                  <TouchableOpacity onPress={() => { this.cancel(); }}>
-                    <Image style={styles.btn} source={ require('../../src/imgs/btnCancelar.png') } />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity onPress={() => { this.avancaStep1(false); }} >
-                    <Image style={styles.btn} source={ require('../../src/imgs/btnAvancar.png') } />
-                  </TouchableOpacity>
+          </Modal>
+          
+          <Modal 
+            transparent={false} 
+            hardwareAccelerated={true}
+            animationType={'fade'}
+            visible={this.state.modalNoVehicle} 
+            onRequestClose={() => {
+              console.log('Modal has been closed.');
+            }}>
+            <View>
+              <ImageBackground source={ require('../../src/imgs/bg_indicacao.png') } style={{width: '100%', height: '100%'}} >
+                <View style={ styles.boxTitle}>
+                  <Text style={styles.title}>QUERO INDICAR UM AMIGO</Text>
+                  
+                  <View style={styles.sub_titlebox}>
+                    <Text style={styles.sub_title2}>Tudo bem se você não tem veículo, aqui você pode indicar um amigo para participar desta promoção</Text>
+                  </View>
 
                 </View>
-                
+                  
+                  <View style={styles.containerBtns} >
+
+                    <TouchableOpacity onPress={() => { this.cancelIndicacao(); }}>
+                      <Image style={styles.btn} source={ require('../../src/imgs/btnCancelar.png') } />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => { this.simTenhoVeiculo(); }} >
+                      <Image style={styles.btn} source={ require('../../src/imgs/btnAvancar.png') } />
+                    </TouchableOpacity> 
+
+                  </View>
+                  
+              </ImageBackground>
             </View>
           </Modal>
         </View>
@@ -156,7 +225,19 @@ const styles = StyleSheet.create({
   },
 
   sub_title: {
-    fontSize: 25,
+    fontSize: 18,
+  },
+
+  sub_titlebox: {
+    marginTop: 10,
+    marginBottom: 20,
+    width: 600,
+    alignItems:'center',
+  },
+  
+  sub_title2: {
+    fontSize: 28,
+    textAlign:'center',
   },
 
   boxInputs: {
@@ -184,6 +265,7 @@ const styles = StyleSheet.create({
     borderColor: '#3686d1',
     borderWidth: 1,
     color: '#3686d1',
+    backgroundColor: '#fff',
   },
 
   title: {
