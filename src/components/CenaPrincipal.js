@@ -51,6 +51,10 @@ export default class Home extends Component{
 
   }
 
+  cancel() {
+    this.setState({modalVisible: false});
+  }
+
   render() {
 
     if(this.state.showIndicator){
@@ -94,6 +98,7 @@ export default class Home extends Component{
             <View style={ {marginTop: 22} }>
               <View style={ styles.boxTitle}>
                 <Text style={styles.title}>DADOS DO VEÍCULO</Text>
+                <Text style={styles.sub_title}>Utilize a placa do seu veículo para consultar o resultado</Text>
               </View>
                 
                 <View style={styles.boxInputs} >
@@ -115,10 +120,16 @@ export default class Home extends Component{
                   />
                 </View>
 
-                <View style={styles.boxBtn} >
-                  <TouchableOpacity onPress={() => { this.avancaStep1(false); }} >
-                    <Image style={styles.btnStep1} source={ require('../../src/imgs/btnAvancar.png') } />
+                <View style={styles.containerBtns} >
+
+                  <TouchableOpacity onPress={() => { this.cancel(); }}>
+                    <Image style={styles.btn} source={ require('../../src/imgs/btnCancelar.png') } />
                   </TouchableOpacity>
+
+                  <TouchableOpacity onPress={() => { this.avancaStep1(false); }} >
+                    <Image style={styles.btn} source={ require('../../src/imgs/btnAvancar.png') } />
+                  </TouchableOpacity>
+
                 </View>
                 
             </View>
@@ -144,6 +155,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
+  sub_title: {
+    fontSize: 25,
+  },
+
   boxInputs: {
     alignItems: 'center',
     marginLeft: 25,
@@ -151,14 +166,9 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
     
-  boxBtn: {
-    alignItems: 'center',
-    marginTop: 70,
-    marginRight: 15,
-  },
-
-  btnStep1: {
+  btn: {
     borderRadius: 60,
+    marginRight: 10,
     width: 350,
     height: 70
   },
@@ -171,9 +181,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 15,
     paddingLeft: 25,
+    borderColor: '#3686d1',
     borderWidth: 1,
     color: '#3686d1',
-    borderColor: '#3686d1',
   },
 
   title: {
@@ -183,32 +193,36 @@ const styles = StyleSheet.create({
 
   containerBtns: {
     flexDirection: 'row',
+    marginTop: 25,
     justifyContent: 'center',
-    marginTop: 100,
+    alignItems: 'center',
   },
 
   btnNao: {
     borderRadius: 60,
     marginRight: 10,
     width: 350,
-    height: 80
+    height: 70
   },
+
   btnSim: {
     borderRadius: 60,
     marginLeft: 10,
     width: 350,
-    height: 80
+    height: 70
   },
+
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 70
   },
+
   activityIndicator: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 80
+    height: 150
  }
 })
